@@ -5,7 +5,7 @@ from PyQt5.QtCore import QUrl, QCoreApplication, QTimer
 from qt_grbl_qobject import QtGrblQObject
 from state import State
 
-HOSTNAME="dykstrabot.local"
+HOSTNAME="postscope.local"
 
 def parseStatus(status):
     status = status.strip()

@@ -38,7 +38,7 @@ class QRAMPSObject(QtCore.QObject):
         super(QtCore.QObject, self).__init__(*args, **kwargs)
 
         self.serial = QSerialPort()
-        port = "COM19"
+        port = "/dev/ttyUSB0"
         self.serial.setPortName(port)
         if self.serial.open(QtCore.QIODevice.ReadWrite):
             self.serial.setDataTerminalReady(True)
