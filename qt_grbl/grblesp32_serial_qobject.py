@@ -2,10 +2,10 @@ import sys
 
 from PyQt5 import QtCore, QtWebSockets, QtNetwork
 from PyQt5.QtCore import QUrl, QCoreApplication, QTimer
-from qt_grbl_qobject import QtGrblQObject
+from .qt_grbl_qobject import QtGrblQObject
 from PyQt5.QtSerialPort import QSerialPort
 
-from state import State
+from .state import State
 
 HOSTNAME="postscope.local"
 
@@ -58,28 +58,33 @@ class GRBLESP32Client(QtGrblQObject):
             print("waiting for an ok")
         if message == 'ok':
             print("Got ok in state", self.state)
+            self.messageSignal.emit(message)
             if self.state == State.STATE_SENDING_COMMAND:
                 self.changeState(State.STATE_READY)
             elif self.state == State.STATE_INIT:
                 self.changeState(State.STATE_READY)
             else:
                 print("Got ok when didn't expect one!")
+        elif message.startswith('error:'):
+            print("Got error in state", self.state)
+            if self.state == State.STATE_SENDING_COMMAND:
+                self.changeState(State.STATE_READY)
+            elif self.state == State.STATE_INIT:
+                self.changeState(State.STATE_READY)
+            else:
+                print("Got error when didn't expect one!")
         else:
             results = parseStatus(message)
             if results:
                 self.statusSignal.emit(results)
             else:
                 self.messageSignal.emit(message)
-    
-    def internal_do_status(self):
-        b = bytearray('?', 'utf-8')
-        self.serial.writeData(b)
-        self.changeState(State.STATE_SENDING_COMMAND)
 
     def internal_send_line(self, line):
         b = bytearray(line + '\r', 'utf-8')
         self.serial.writeData(b)
-        self.changeState(State.STATE_SENDING_COMMAND)
+        if not line.startswith("$"):
+            self.changeState(State.STATE_SENDING_COMMAND)
 
     def error(self, error_code):
         print("error code: {}".format(error_code))
