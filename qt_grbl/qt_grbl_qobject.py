@@ -37,7 +37,7 @@ class QtGrblQObject(QtCore.QObject):
         if self.state != State.STATE_READY:
             print("Cannot send line when not ready")
             return False
-        print("send line")
+        print("send line", line)
         self.internal_send_line(line)
         return True
 

@@ -42,13 +42,14 @@ class GRBLESP32Client(QtGrblQObject):
             print("Failed to open serial port")
 
     def on_serial_read(self):
-        print("serial read")
+        #print("serial read")
         if not self.serial.canReadLine():
             line = self.serial.readLine()
-            print("incomplete line, adding", line)
+            #print("incomplete line, adding", line)
             self.line += line.data().decode('US_ASCII')
             return
-        message = self.line + self.serial.readLine().data().decode('US_ASCII').strip()
+        message = self.line + self.serial.readLine().data().decode('US_ASCII')
+        message = message.strip()
         self.line = ""
     
         if message == '':
