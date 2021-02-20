@@ -2,10 +2,10 @@ import sys
 
 from PyQt5 import QtCore, QtWebSockets, QtNetwork
 from PyQt5.QtCore import QUrl, QCoreApplication, QTimer
-from qt_grbl_qobject import QtGrblQObject
+from .qt_grbl_qobject import QtGrblQObject
 from PyQt5.QtSerialPort import QSerialPort
 
-from state import State
+from .state import State
 
 HOSTNAME="postscope.local"
 
