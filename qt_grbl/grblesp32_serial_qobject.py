@@ -58,7 +58,7 @@ class GRBLESP32Client(QtGrblQObject):
         if self.state == State.STATE_SENDING_COMMAND:
             print("waiting for an ok")
         if message == 'ok':
-            print("Got ok in state", self.state)
+            #print("Got ok in state", self.state)
             self.messageSignal.emit(message)
             if self.state == State.STATE_SENDING_COMMAND:
                 self.changeState(State.STATE_READY)
@@ -86,6 +86,9 @@ class GRBLESP32Client(QtGrblQObject):
         self.serial.writeData(b)
         if not line.startswith("$"):
             self.changeState(State.STATE_SENDING_COMMAND)
+
+    def internal_write(self, code):
+        self.serial.writeData(bytes([code]))
 
     def error(self, error_code):
         print("error code: {}".format(error_code))
