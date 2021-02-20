@@ -3,7 +3,7 @@ import sys
 from PyQt5 import QtCore
 from PyQt5.QtCore import QTimer
 
-from .state import State
+from state import State
 
 class QtGrblQObject(QtCore.QObject):
     messageSignal = QtCore.pyqtSignal(str)
